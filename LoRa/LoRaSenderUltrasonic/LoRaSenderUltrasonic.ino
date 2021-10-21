@@ -1,8 +1,8 @@
 #include <SPI.h>
 #include <LoRa.h>
 
-const int trigPin = 9;
-const int echoPin = 10;
+const int trigPin = 2;
+const int echoPin = 3;
 
 int counter = 0;
 float duration, distance;
@@ -21,7 +21,7 @@ void setup() {
   }
 }
 
-void loop() {
+float distanceCalc(){
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);
@@ -29,8 +29,11 @@ void loop() {
   digitalWrite(trigPin, LOW);
   
   duration = pulseIn(echoPin, HIGH);
-  distance = (duration*.0343)/2;
-  
+  return (duration*.0343)/2;
+}
+
+void loop() {
+  distance = distanceCalc();
   Serial.print("Sending packet: ");
   Serial.println(counter);
 
@@ -38,10 +41,9 @@ void loop() {
   LoRa.beginPacket();
   LoRa.print("Distance: ");
   LoRa.print(distance);
-  LoRa.println(" cm");
+  LoRa.print(" cm");
   LoRa.endPacket();
 
   counter++;
-
   delay(5000);
 }
