@@ -43,6 +43,7 @@ def main():
             while not stop:
                 
                 value = remote_device.get_adc_value(IOLINE_IN)
+                print("True Value: ", value)
                 air_readings(value)
 
                 time.sleep(5)
